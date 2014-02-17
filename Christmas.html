@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Christmas</title>
+</head>
+<body>
+<style>
+    canvas {
+        border: 1px solid #064395;
+        color: #b49a1c;
+    }
+</style>
+
+<canvas id="snowman" width="800" height="600"></canvas>
+
+<script>
+    var canvas = document.getElementById("snowman");
+    var ctx = canvas.getContext("2d");
+
+    //Sky
+    ctx.rect(0, 0, canvas.width, canvas.height / 2);
+    var skyLG = ctx.createLinearGradient(0, canvas.height / 2, 0, 0);
+    skyLG.addColorStop(0, '#0026ff'); //light blue    
+    skyLG.addColorStop(1, '#0e1452'); //dark blue
+    ctx.fillStyle = skyLG;
+    ctx.fill();
+
+    //Stars
+    createStars(0, 0, canvas.width, canvas.height / 2);
+
+    createTree(15, 250, "#000");
+    createTree(30, 240, "#000");
+    createTree(45, 230, "#000");
+    createTree(60, 220, "#000");
+    createTree(70, 218, "#000");
+    createTree(90, 200, "#000");
+    createTree(110, 190, "#000");
+    createTree(130, 190, "#000");
+    createTree(150, 180, "#000");
+    createTree(160, 185, "#000");
+    createTree(190, 170, "#000");
+    createTree(220, 170, "#000");
+    createTree(235, 170, "#000");
+    createTree(248, 167, "#000");
+    createTree(262, 169, "#000");
+    createTree(279, 170, "#000");
+    createTree(318, 175, "#000");
+    createTree(334, 179, "#000");
+    createTree(354, 185, "#000");
+
+    //Snow
+    var snowLG = ctx.createLinearGradient(0, canvas.height, 0, canvas.height / 2);
+    snowLG.addColorStop(0, '#fff'); //light    
+    snowLG.addColorStop(1, '#e1e3f8'); //dark blue
+    ctx.rect(0, canvas.height / 2, canvas.width, canvas.height);
+    ctx.fillStyle = snowLG;
+    ctx.fill();
+    //ctx.fillRect(0, canvas.height / 2, canvas.width, canvas.height);
+
+    //Horizont
+    var horizontStartY = canvas.height / 2;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(0, horizontStartY);
+    ctx.quadraticCurveTo(200, horizontStartY - 150, (canvas.width / 2) + 50, horizontStartY - 50);
+    ctx.quadraticCurveTo(600, horizontStartY + 10, canvas.width, horizontStartY);
+    ctx.fillStyle = "#e1e3f8";
+    ctx.fill();
+    ctx.stroke();
+
+    //Snow shadow
+    ctx.save();
+    ctx.globalAlpha = 0.2;
+    ctx.fillStyle = "#caccdf";
+    ctx.beginPath();
+    ctx.moveTo(170, 280);
+    //ctx.lineTo(350, 320);
+    ctx.bezierCurveTo(250, 240, 285, 300, 350, 310);
+    ctx.quadraticCurveTo(400, 320, 340, 350);
+    ctx.bezierCurveTo(290, 380, 200, 420, 170, 360);
+    ctx.quadraticCurveTo(90, 290, 170, 280);
+    ctx.fill();
+    ctx.restore();
+
+    //Snowman
+    ctx.lineWidth = 3;
+    var bodyStartX = 600, bodyStartY = 450;
+    //Body foot
+    var snowmanRG1 = ctx.createRadialGradient(bodyStartX - 20, bodyStartY - 20, 66, bodyStartX, bodyStartY, 95);
+    snowmanRG1.addColorStop(0, "#fff");
+    snowmanRG1.addColorStop(1, "#ccc");
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(bodyStartX, bodyStartY, 100, 0, 2 * Math.PI, false);
+    ctx.shadowColor = '#ccc';
+    ctx.shadowBlur = 10;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 20;
+    ctx.fillStyle = snowmanRG1;
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+    //Body mid
+    bodyStartY = 330;
+    var snowmanRG2 = ctx.createRadialGradient(bodyStartX - 10, bodyStartY - 25, 50, bodyStartX, bodyStartY - 10, 70);
+    snowmanRG2.addColorStop(0, "#fff");
+    snowmanRG2.addColorStop(1, "#ccc");
+    ctx.beginPath();
+    ctx.arc(bodyStartX, bodyStartY, 75, 0, 2 * Math.PI, false);
+    ctx.fillStyle = snowmanRG2;
+    ctx.fill();
+    ctx.stroke();
+    //Body mid buttons
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(bodyStartX - 50, bodyStartY - 25, 4, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(bodyStartX - 60, bodyStartY, 4, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(bodyStartX - 55, bodyStartY + 25, 4, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+
+    //Body head
+    var headStartX = bodyStartX, headStartY = 230;
+    //headStartX += 50;
+    var snowmanRG3 = ctx.createRadialGradient(headStartX - 15, headStartY - 20, 20, headStartX, headStartY, 60);
+    snowmanRG3.addColorStop(0, "#fff");
+    snowmanRG3.addColorStop(1, "#ccc");
+    ctx.beginPath();
+    ctx.arc(headStartX, headStartY, 50, 0, 2 * Math.PI, false);
+    ctx.fillStyle = snowmanRG3;
+    ctx.fill();
+    ctx.stroke();
+    //Scarf
+    var scarfStartX = 562, scarfStartY = 264;
+    ctx.lineWidth = 2;
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(scarfStartX, scarfStartY);
+    ctx.quadraticCurveTo(scarfStartX + 38, scarfStartY + 28, 640, scarfStartY); //right
+    ctx.quadraticCurveTo(scarfStartX + 88, scarfStartY + 5, 653, scarfStartY + 12); //down
+    ctx.quadraticCurveTo(scarfStartX + 38, scarfStartY + 43, scarfStartX - 12, scarfStartY + 11); //left
+    ctx.quadraticCurveTo(scarfStartX - 10, scarfStartY - 0, scarfStartX, scarfStartY); //up
+    ctx.stroke();
+    ctx.fill();
+    scarfStartX = 580, scarfStartY = 280;
+    var scarfLG1 = ctx.createLinearGradient(scarfStartX, scarfStartY, scarfStartX + 20, scarfStartY + 100);
+    scarfLG1.addColorStop(0, '#ff0000'); //light    
+    scarfLG1.addColorStop(1, '#aa0909'); //dark
+    ctx.fillStyle = scarfLG1;
+    ctx.strokeStyle = "orange";
+    ctx.beginPath();
+    ctx.moveTo(scarfStartX, scarfStartY);
+    ctx.lineTo(scarfStartX - 20, scarfStartY + 60); //down
+    ctx.quadraticCurveTo(scarfStartX + 10, scarfStartY + 70, scarfStartX + 30, scarfStartY + 60); //right
+    ctx.lineTo(scarfStartX + 25, scarfStartY + 5); //up
+    ctx.stroke();
+    ctx.fill();
+    scarfStartX = 580, scarfStartY = 272;
+    var scarfLG2 = ctx.createLinearGradient(scarfStartX + 10, scarfStartY + 5, scarfStartX + 50, scarfStartY + 40);
+    scarfLG2.addColorStop(0, '#ff0000'); //light 
+    scarfLG2.addColorStop(0.5, '#aa0909'); //dark
+    ctx.strokeStyle = "orange";
+    ctx.fillStyle = scarfLG2;
+    ctx.beginPath();
+    ctx.moveTo(scarfStartX, scarfStartY);
+    ctx.quadraticCurveTo(scarfStartX - 10, scarfStartY + 10, scarfStartX, scarfStartY + 20); //down
+    ctx.quadraticCurveTo(scarfStartX + 15, scarfStartY + 26, scarfStartX + 30, scarfStartY + 20); //right
+    ctx.quadraticCurveTo(scarfStartX + 40, scarfStartY + 10, scarfStartX + 30, scarfStartY + 5); //up
+    ctx.closePath();
+    //ctx.stroke();
+    ctx.fill();
+
+    //Nose, 578
+    var noseStartX = headStartX - 22, noseStartY = 225;
+    var noseRG = ctx.createLinearGradient(noseStartX, noseStartY, noseStartX, noseStartY + 20);
+    noseRG.addColorStop(0, "#eba110");//eba110
+    noseRG.addColorStop(1, "#af780d");
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(noseStartX, noseStartY);
+    ctx.lineTo(noseStartX - 50, noseStartY + 20);
+    ctx.lineTo(noseStartX + 5, noseStartY + 20);
+    ctx.quadraticCurveTo(noseStartX + 10, noseStartY + 5, noseStartX, noseStartY);
+    ctx.fillStyle = noseRG;
+    ctx.fill();
+    ctx.stroke();
+    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = "#333";
+    ctx.beginPath();
+    ctx.moveTo(noseStartX - 5, noseStartY + 3);
+    ctx.quadraticCurveTo(noseStartX - 1, 235, noseStartX - 4, 244);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(noseStartX - 20, noseStartY + 8);
+    ctx.quadraticCurveTo(noseStartX - 15, noseStartY + 10, noseStartX - 19, noseStartY + 19);
+    ctx.stroke();
+    //Eyes
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000";
+    var snowmanRGEye1 = ctx.createRadialGradient(headStartX-25, 214, 2, 572, 212, 7);
+    snowmanRGEye1.addColorStop(0, "#fff");
+    snowmanRGEye1.addColorStop(1, "#000");
+    var snowmanRGEye2 = ctx.createRadialGradient(headStartX-7, 214, 2, 590, 211, 7);
+    snowmanRGEye2.addColorStop(0, "#fff");
+    snowmanRGEye2.addColorStop(1, "#000");
+    //Left eye
+    ctx.beginPath();
+    ctx.arc(headStartX - 25, 214, 5, 0, 2 * Math.PI, false);
+    ctx.fillStyle = snowmanRGEye1;
+    ctx.fill();
+    ctx.stroke();
+    //Right eye
+    ctx.beginPath();
+    ctx.arc(headStartX - 7, 214, 6, 0, 2 * Math.PI, false);
+    ctx.fillStyle = snowmanRGEye2;
+    ctx.fill();
+    ctx.stroke();
+    //Mouth
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(headStartX - 29, 256, 2, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(headStartX - 18, 260, 3, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(headStartX - 6, 260, 3, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(headStartX + 6, 255, 4, 0, 2 * Math.PI, false);
+    ctx.stroke();
+    ctx.fill();
+
+    //Hat
+    var hatStartX = 618, hatStartY = 195;
+    var hatRG = ctx.createLinearGradient(595, 195, 615, 202);
+    hatRG.addColorStop(0, "#444");
+    hatRG.addColorStop(1, "#000");
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000";
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(hatStartX, hatStartY);
+    ctx.bezierCurveTo(hatStartX - 180, hatStartY - 70, hatStartX + 165, hatStartY + 95, hatStartX, hatStartY);
+    ctx.stroke();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(hatStartX - 30, hatStartY - 10);
+    ctx.lineTo(hatStartX - 10, hatStartY - 70);
+    ctx.quadraticCurveTo(655, 115, hatStartX + 60, hatStartY - 40);
+    ctx.lineTo(hatStartX + 25, hatStartY + 15);
+    ctx.stroke();
+    ctx.fillStyle = hatRG;
+    ctx.fill();
+
+    //Arms
+    ctx.strokeStyle = "#894d13";
+    //Left arm
+    ctx.beginPath();
+    ctx.moveTo(527, 310);
+    ctx.lineTo(470, 325);
+    ctx.moveTo(485, 320);
+    ctx.lineTo(465, 315);
+    ctx.moveTo(493, 318);
+    ctx.lineTo(470, 340);
+    ctx.lineWidth = 5;
+    ctx.stroke();
+    //Right arm
+    ctx.beginPath();
+    ctx.moveTo(650, 315);
+    ctx.lineTo(700, 370);
+    ctx.lineTo(695, 390);
+    ctx.moveTo(700, 370);
+    ctx.lineTo(722, 375);
+    ctx.moveTo(700, 370);
+    ctx.lineTo(715, 383);
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    //Trees
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#000";
+
+    //Dark trees
+    createTree(52, 223, "#1b5023");
+    createTree(100, 200, "#1b5023");
+    createTree(120, 190, "#1b5023");
+    createTree(140, 180, "#1b5023");
+    createTree(175, 175, "#1b5023");
+    createTree(210, 170, "#1b5023");
+    createTree(230, 165, "#1b5023");
+    createTree(305, 170, "#1b5023");
+    createTree(325, 175, "#1b5023");
+
+    //Light trees
+    createTree(20, 250, "#32793d");
+    createTree(40, 240, "#32793d");
+    createTree(65, 230, "#32793d");
+    createTree(85, 210, "#32793d");
+    createTree(100, 220, "#32793d");
+    createTree(130, 200, "#32793d");
+    createTree(155, 190, "#32793d");
+    createTree(190, 190, "#32793d");
+    createTree(220, 180, "#32793d");
+    createTree(290, 170, "#32793d");
+    createTree(320, 190, "#32793d");
+    createTree(345, 185, "#32793d");
+
+    //Ski tracks
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = "#ddd";
+    ctx.beginPath();
+    ctx.moveTo(260, 213);
+    ctx.bezierCurveTo(150, 340, 350, 360, 0, canvas.height);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(265, 213);
+    ctx.bezierCurveTo(150, 340, 345, 360, 40, canvas.height);
+    ctx.stroke();
+    ctx.strokeStyle = "#eee";
+    ctx.beginPath();
+    ctx.moveTo(260, 213);
+    ctx.bezierCurveTo(150, 340, 350, 360, 3, canvas.height);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(265, 213);
+    ctx.bezierCurveTo(150, 340, 345, 360, 43, canvas.height);
+    ctx.stroke();
+
+    //Moon
+    var moonStartX = 80, moonStartY = 80;
+    var moonRG1 = ctx.createRadialGradient(moonStartX + 15, moonStartY + 15, 20, moonStartX + 0, moonStartY, 80);
+    moonRG1.addColorStop(0, "#f1ecd3");
+    moonRG1.addColorStop(1, "#dec132");
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(moonStartX, moonStartY, 50, 0, 2 * Math.PI, false);
+    ctx.shadowColor = '#dec132';
+    ctx.shadowBlur = 20;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+    ctx.fillStyle = moonRG1;
+    ctx.fill();
+    ctx.restore();
+    //Crater 1
+    ctx.save();
+    ctx.beginPath();
+    ctx.globalAlpha = 0.05;
+    ctx.arc(moonStartX + 20, moonStartY + 0, 15, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#b49a1c";
+    ctx.fill();
+    ctx.restore();
+    //Crater 2
+    ctx.save();
+    ctx.beginPath();
+    ctx.globalAlpha = 0.1;
+    ctx.arc(moonStartX - 10, moonStartY + 10, 20, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#b49a1c";
+    ctx.fill();
+    ctx.restore();
+    //Crater 3
+    ctx.save();
+    ctx.beginPath();
+    ctx.globalAlpha = 0.1;
+    ctx.arc(moonStartX + 5, moonStartY + 20, 10, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#b49a1c";
+    ctx.fill();
+    ctx.restore();
+    //Crater 4
+    ctx.save();
+    ctx.beginPath();
+    ctx.globalAlpha = 0.05;
+    ctx.arc(moonStartX + 3, moonStartY - 15, 12, 0, 2 * Math.PI, false);
+    ctx.fillStyle = "#b49a1c";
+    ctx.fill();
+    ctx.restore();
+
+    //createTree(400, 400, "red");
+    //createTree(440, 400, "blue");
+
+    function createTree(startX, startY, color) {
+        ctx.fillStyle = color;
+        var nextY = startY;
+        var base = 10, height = 25;
+        if (color == "red") {
+            height = 20;
+            console.log(Math.round(25 / 3));
+            console.log(Math.round(20 / 3));
+        }
+
+        for (var i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.moveTo(startX, nextY);
+            ctx.lineTo(startX - (base + i * 3), nextY + height);
+            ctx.lineTo(startX + (base + i * 3), nextY + height);
+            ctx.closePath();
+            ctx.fill();
+            //ctx.strokeStyle = "black";
+            //ctx.lineWidth = 1;
+            //ctx.stroke();
+
+            nextY += (height / 2) + 3;
+        }
+
+        //Trunk
+        nextY += Math.floor(height / 3);
+
+        ctx.fillStyle = "#894d13";
+        ctx.beginPath();
+        ctx.moveTo(startX, nextY);
+        ctx.lineTo(startX - 3, nextY + 5);
+        ctx.lineTo(startX + 3, nextY + 5);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    function createStars(startX, startY, endX, endY) {
+        ctx.fillStyle = "yellow";
+
+        for (var i = 0; i < 100; i++) {
+            var x = Math.floor((Math.random() * endX) + 1);
+            var y = Math.floor((Math.random() * endY) + 1);
+            var size = Math.floor((Math.random() * 4));
+
+            ctx.beginPath();
+            ctx.fillRect(x, y, size, size);
+            ctx.fill();
+        }
+    }
+</script>
+
+</body>
+</html>
